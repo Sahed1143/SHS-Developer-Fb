@@ -30,6 +30,7 @@
         .spinner { width: 36px; height: 36px; border: 3px solid #1a1a1e; border-top: 3px solid #38bdf8; border-radius: 50%; animation: spin 0.8s linear infinite; margin: 25px auto 15px; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         
+        /* Modal Overlay & Cards */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: flex; justify-content: center; align-items: center; z-index: 1000; }
         .modal-card { background: #121214; border: 1px solid #222225; border-radius: 20px; padding: 22px; width: 88%; max-width: 330px; text-align: left; }
         .modal-title { font-size: 15px; font-weight: bold; margin-bottom: 10px; color: #ffffff; }
@@ -86,19 +87,28 @@
         </div>
     </div>
 
+    <!-- Screen 4: Custom Alert Box (ডোমেন হাইড করার জন্য) -->
+    <div id="customAlertModal" class="modal-overlay hidden">
+        <div class="modal-card" style="text-align: center;">
+            <div id="customAlertTitle" style="font-size: 16px; font-weight: bold; margin-bottom: 10px; color: #38bdf8;"></div>
+            <div id="customAlertMsg" style="font-size: 13px; color: #dddddd; margin-bottom: 20px; line-height: 1.5;"></div>
+            <button class="btn-action btn-join" style="width: 100%;" onclick="closeCustomAlert()">OK</button>
+        </div>
+    </div>
+
     <script>
         // ===============================================
-        // ১. ফায়ারবেস কনফিগারেশন (উভয় ফাইলে একই থাকবে)
+        // ১. ফায়ারবেস কনফিগারেশন
         // ===============================================
         const firebaseConfig = {
-  apiKey: "AIzaSyDAWqPG5kdELGK-ypPLf2V9vtdXx4WqATA",
-  authDomain: "shs-developer-fb.firebaseapp.com",
-  databaseURL: "https://shs-developer-fb-default-rtdb.firebaseio.com",
-  projectId: "shs-developer-fb",
-  storageBucket: "shs-developer-fb.firebasestorage.app",
-  messagingSenderId: "115660277841",
-  appId: "1:115660277841:web:83f24c7f5b60aad2f25070"
-};
+            apiKey: "AIzaSyDAWqPG5kdELGK-ypPLf2V9vtdXx4WqATA",
+            authDomain: "shs-developer-fb.firebaseapp.com",
+            databaseURL: "https://shs-developer-fb-default-rtdb.firebaseio.com",
+            projectId: "shs-developer-fb",
+            storageBucket: "shs-developer-fb.firebasestorage.app",
+            messagingSenderId: "115660277841",
+            appId: "1:115660277841:web:83f24c7f5b60aad2f25070"
+        };
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
@@ -114,6 +124,25 @@
             return deviceId;
         }
 
+        // ===============================================
+        // ৩. কাস্টম নোটিফিকেশন পপ-আপ (No Domain Header)
+        // ===============================================
+        let alertCallbackAction = null;
+        function showNotification(title, message, callback = null) {
+            document.getElementById("customAlertTitle").innerText = title;
+            document.getElementById("customAlertMsg").innerHTML = message;
+            document.getElementById("customAlertModal").classList.remove("hidden");
+            alertCallbackAction = callback;
+        }
+
+        function closeCustomAlert() {
+            document.getElementById("customAlertModal").classList.add("hidden");
+            if (alertCallbackAction) {
+                alertCallbackAction();
+                alertCallbackAction = null;
+            }
+        }
+
         // অটো লগইন
         window.onload = function() {
             const savedKey = localStorage.getItem("shs_active_key");
@@ -124,12 +153,12 @@
         };
 
         // ===============================================
-        // ৩. কি ভ্যালিডেশন লজিক
+        // ৪. কি ভ্যালিডেশন লজিক
         // ===============================================
         function verifyKey() {
             const userKey = document.getElementById("accessKeyInput").value.trim();
             if (!userKey) {
-                alert("দয়া করে একটি অ্যাক্সেস কি প্রদান করুন!");
+                showNotification("⚠️ Input Required", "দয়া করে আপনার Access Key-টি প্রদান করুন।");
                 return;
             }
 
@@ -140,8 +169,7 @@
 
             database.ref("keys/" + userKey).once("value").then((snapshot) => {
                 if (!snapshot.exists()) {
-                    alert("ভুল অ্যাক্সেস কি (Invalid Key)! সঠিক কি দিন।");
-                    resetToLogin();
+                    showNotification("❌ Invalid Access Key", "আপনার দেওয়া Access Key-টি সঠিক নয়! সঠিক Key দিয়ে আবার চেষ্টা করুন।", resetToLogin);
                     return;
                 }
 
@@ -158,12 +186,14 @@
                     showTelegramPopup();
                 } 
                 else {
-                    alert("এই কি-টি ইতিমধ্যে অন্য একটি ডিভাইসে সক্রিয় করা হয়েছে! (১ কি = ১ ডিভাইস)");
-                    resetToLogin();
+                    showNotification(
+                        "🔒 Access Denied", 
+                        "এই Access Key-টি ইতিমধ্যে অন্য একটি ডিভাইসে ব্যবহার করা হয়েছে!<br><br><small style='color:#38bdf8;'>(1 Key = 1 Device Policy)</small>", 
+                        resetToLogin
+                    );
                 }
             }).catch((err) => {
-                alert("এরর: " + err.message);
-                resetToLogin();
+                showNotification("⚠️ Network Error", "নেটওয়ার্ক সমস্যা: " + err.message, resetToLogin);
             });
         }
 
@@ -185,7 +215,7 @@
         function redirectToFacebook() {
             document.getElementById("telegramModal").classList.add("hidden");
             window.location.href = "https://mbasic.facebook.com/";
-       }
+        }
 
         function buyKey() {
             window.open("https://t.me/saku_143", "_blank");
