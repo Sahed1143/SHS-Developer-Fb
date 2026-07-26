@@ -2,7 +2,7 @@
 <html lang="bn">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>𝚂𝙷𝚂 𝙳𝚎𝚟𝚎𝚕𝚘𝚙𝚎𝚛 𝙵𝙱</title>
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -87,7 +87,7 @@
         </div>
     </div>
 
-    <!-- Screen 4: Custom Alert Box (ডোমেন হাইড করার জন্য) -->
+    <!-- Screen 4: Custom Alert Box -->
     <div id="customAlertModal" class="modal-overlay hidden">
         <div class="modal-card" style="text-align: center;">
             <div id="customAlertTitle" style="font-size: 16px; font-weight: bold; margin-bottom: 10px; color: #38bdf8;"></div>
@@ -125,7 +125,25 @@
         }
 
         // ===============================================
-        // ৩. কাস্টম নোটিফিকেশন পপ-আপ (No Domain Header)
+        // ৩. ওয়েবভিউ / অ্যাপক্রিয়েটর লিঙ্ক ওপেনার
+        // ===============================================
+        function safeOpenUrl(url) {
+            try {
+                // WebView-তে window.open ক্র্যাশ রোধ করতে Dynamic Element
+                let a = document.createElement('a');
+                a.href = url;
+                a.target = '_blank';
+                a.rel = 'noopener noreferrer';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            } catch (e) {
+                window.location.href = url;
+            }
+        }
+
+        // ===============================================
+        // ৪. কাস্টম নোটিফিকেশন পপ-আপ
         // ===============================================
         let alertCallbackAction = null;
         function showNotification(title, message, callback = null) {
@@ -143,7 +161,7 @@
             }
         }
 
-        // অটো লগইন
+        // অটো লগইন চেকিং
         window.onload = function() {
             const savedKey = localStorage.getItem("shs_active_key");
             if (savedKey) {
@@ -153,7 +171,7 @@
         };
 
         // ===============================================
-        // ৪. কি ভ্যালিডেশন লজিক
+        // ৫. কি ভ্যালিডেশন লজিক
         // ===============================================
         function verifyKey() {
             const userKey = document.getElementById("accessKeyInput").value.trim();
@@ -207,9 +225,12 @@
             document.getElementById("telegramModal").classList.remove("hidden");
         }
 
+        // ===============================================
+        // ৬. নেভিগেশন ও রিডাইরেকশন ফাংশন
+        // ===============================================
         function openTelegramChannel() {
-            window.open("https://t.me/winfanti", "_blank");
-            redirectToFacebook();
+            safeOpenUrl("https://t.me/winfanti");
+            setTimeout(redirectToFacebook, 500);
         }
 
         function redirectToFacebook() {
@@ -218,7 +239,7 @@
         }
 
         function buyKey() {
-            window.open("https://t.me/saku_143", "_blank");
+            safeOpenUrl("https://t.me/saku_143");
         }
     </script>
 </body>
