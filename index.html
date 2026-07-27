@@ -2,244 +2,252 @@
 <html lang="bn">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>𝚂𝙷𝚂 𝙳𝚎𝚟𝚎𝚕𝚘𝚙𝚎𝚛 𝙵𝙱</title>
-    <!-- Firebase SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIP FB Proxy App</title>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-        body { background-color: #050505; color: #ffffff; display: flex; justify-content: center; align-items: center; min-height: 100vh; overflow: hidden; }
-        .container { width: 100%; max-width: 380px; padding: 20px; text-align: center; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background-color: #000000; 
+            color: #ffffff; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+            padding: 15px; 
+        }
+        .container { 
+            width: 100%; 
+            max-width: 360px; 
+            background: #090909; 
+            border: 1px solid #1a1a1a; 
+            border-radius: 20px; 
+            padding: 30px 20px; 
+            text-align: center; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.95); 
+        }
+        h2 { font-size: 20px; margin-bottom: 25px; color: #ffffff; font-weight: 600; }
         
-        .logo-box { width: 75px; height: 75px; background: #111113; border: 1px solid #222225; border-radius: 20px; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: bold; color: #38bdf8; }
-        h2.app-title { font-size: 18px; font-weight: 800; color: #ffffff; }
-        p.sub-title { font-size: 12px; color: #777777; margin-top: 8px; line-height: 1.4; }
+        /* Input & Button Styles */
+        input { 
+            width: 100%; 
+            padding: 14px; 
+            margin-bottom: 15px; 
+            border: 1px solid #222222; 
+            border-radius: 10px; 
+            background: #121212; 
+            color: #ffffff; 
+            font-size: 16px; 
+            text-align: center; 
+            outline: none; 
+        }
+        input:focus { border-color: #1877f2; }
         
-        .input-box { width: 100%; padding: 15px; background: #0a0a0c; border: 1px solid #2a2a2e; border-radius: 14px; color: #ffffff; text-align: center; font-size: 15px; letter-spacing: 2px; margin: 25px 0 15px; outline: none; }
-        .input-box:focus { border-color: #38bdf8; }
-        
-        .btn-main { width: 100%; padding: 15px; background: #ffffff; color: #000000; border: none; border-radius: 14px; font-size: 15px; font-weight: 800; cursor: pointer; margin-bottom: 20px; }
-        .btn-main:active { transform: scale(0.98); }
-        .link-text { color: #888888; font-size: 13px; text-decoration: none; cursor: pointer; display: inline-block; }
-        .link-text:hover { color: #38bdf8; }
-        
-        .hidden { display: none !important; }
-        
-        .spinner { width: 36px; height: 36px; border: 3px solid #1a1a1e; border-top: 3px solid #38bdf8; border-radius: 50%; animation: spin 0.8s linear infinite; margin: 25px auto 15px; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        
-        /* Modal Overlay & Cards */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: flex; justify-content: center; align-items: center; z-index: 1000; }
-        .modal-card { background: #121214; border: 1px solid #222225; border-radius: 20px; padding: 22px; width: 88%; max-width: 330px; text-align: left; }
-        .modal-title { font-size: 15px; font-weight: bold; margin-bottom: 10px; color: #ffffff; }
-        .modal-body { font-size: 12px; color: #aaaaaa; margin-bottom: 12px; line-height: 1.5; }
-        .modal-list { font-size: 12px; color: #dddddd; line-height: 1.9; margin-bottom: 18px; }
-        .modal-actions { display: flex; justify-content: flex-end; gap: 12px; align-items: center; }
-        .btn-action { padding: 9px 20px; border-radius: 10px; font-weight: bold; border: none; cursor: pointer; font-size: 13px; }
-        .btn-cancel { background: transparent; color: #ffffff; }
-        .btn-join { background: #ffffff; color: #000000; }
+        .btn-action { 
+            width: 100%; 
+            padding: 14px; 
+            margin: 6px 0; 
+            border: 1px solid #222222; 
+            border-radius: 10px; 
+            font-size: 15px; 
+            font-weight: bold; 
+            cursor: pointer; 
+            background: #141414;
+            color: #ffffff;
+            transition: 0.2s; 
+        }
+        .btn-action:active { background: #222222; }
+        .btn-login { background: #1877f2; color: #ffffff; border: none; }
+        .btn-tg { background: #0088cc; color: #ffffff; border: none; }
+
+        /* Circular Circle VPN Button */
+        .circle-btn-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 25px 0;
+        }
+        .circle-btn {
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            background: #121212;
+            border: 3px solid #222222;
+            color: #888888;
+            font-size: 14px;
+            font-weight: bold;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(0,0,0,0.8);
+            transition: all 0.3s ease;
+        }
+        .circle-btn .icon { font-size: 28px; margin-bottom: 5px; }
+        .circle-btn.connecting { border-color: #ffcc00; color: #ffcc00; }
+        .circle-btn.connected { border-color: #00ffcc; color: #00ffcc; box-shadow: 0 0 20px rgba(0,255,204,0.3); }
+        .circle-btn.error { border-color: #ff4d4d; color: #ff4d4d; }
+
+        /* Status Box */
+        .status-box { 
+            margin-top: 20px; 
+            padding: 12px; 
+            border-radius: 8px; 
+            font-size: 13px; 
+            font-weight: 500; 
+            background: #111111; 
+            border: 1px solid #222222; 
+        }
+        .text-success { color: #00ffcc; }
+        .text-error { color: #ff4d4d; }
+        .text-warning { color: #ffcc00; }
+
+        /* Hidden Sections */
+        #vpnSection { display: none; }
     </style>
 </head>
 <body>
 
     <div class="container">
         
-        <!-- Screen 1: Login -->
-        <div id="loginScreen">
-            <div class="logo-box">&lt;/&gt;</div>
-            <h2 class="app-title">𝚂𝙷𝚂 𝙳𝚎𝚟𝚎𝚕𝚘𝚙𝚎𝚛 𝙵𝙱 — অ্যাক্সেস কি দিন</h2>
-            <p class="sub-title">এই অ্যাপ ব্যবহার করতে নিচে পেমেন্ট করে কিনুন বাটনে ক্লিক করুন।</p>
+        <!-- STEP 1: Login Screen -->
+        <div id="loginSection">
+            <h2>🔑 Access Code Verification</h2>
+            <input type="text" id="accessCode" placeholder="Enter Access Code...">
+            <button class="btn-action btn-login" onclick="verifyAccess()">Login System</button>
+            <button class="btn-action btn-tg" onclick="openTelegram()">Buy Access Code</button>
+            <div id="loginStatus" class="status-box text-warning">এক্সেস কোড দিয়ে লগইন করুন</div>
+        </div>
+
+        <!-- STEP 2: Circular Proxy/VPN Connect Screen -->
+        <div id="vpnSection">
+            <h2>🌐 VIP Proxy System</h2>
             
-            <input type="text" id="accessKeyInput" class="input-box" placeholder="XXXX-XXXX-XXXX" />
-            <button class="btn-main" onclick="verifyKey()">লগইন করুন</button>
-            
-            <div class="link-text" onclick="buyKey()">💳 key নেই? পেমেন্ট করে কিনুন</div>
-            <p style="font-size: 10px; color: #444444; margin-top: 35px; letter-spacing: 1px;">SECURED ACCESS</p>
-        </div>
-
-        <!-- Screen 2: Loading -->
-        <div id="loadingScreen" class="hidden">
-            <div class="logo-box">&lt;/&gt;</div>
-            <h2 class="app-title">𝚂𝙷𝚂 𝙳𝚎𝚟𝚎𝚕𝚘𝚙𝚎𝚛 𝙵𝙱</h2>
-            <div class="spinner"></div>
-            <p style="font-size: 13px; color: #888888;">অনুগ্রহ করে অপেক্ষা করুন...</p>
-        </div>
-
-    </div>
-
-    <!-- Screen 3: Popup Modal -->
-    <div id="telegramModal" class="modal-overlay hidden">
-        <div class="modal-card">
-            <div class="modal-title">📣 আমাদের অফিশিয়াল টেলিগ্রাম চ্যানেলে জয়েন করুন</div>
-            <div class="modal-body">সর্বশেষ অ্যাপ আপডেট, নোটিশ ও সাপোর্ট পেতে আমাদের টেলিগ্রাম চ্যানেলে যুক্ত থাকুন।</div>
-            <div class="modal-list">
-                ✅ সর্বশেষ APK আপডেট ও নোটিশ<br>
-                ✅ বাগ ফিক্স ও নতুন আপডেট<br>
-                ✅ ২৪/৭ সার্ভিস হেল্পডেস্ক
+            <div class="circle-btn-container">
+                <button id="circleBtn" class="circle-btn" onclick="connectProxy()">
+                    <span id="circleIcon" class="icon">🔴</span>
+                    <span id="circleText">CONNECT</span>
+                </button>
             </div>
-            <p style="font-size: 11px; color: #777777; margin-bottom: 15px;">আপনার সমর্থনের জন্য ধন্যবাদ! ❤️</p>
-            <div class="modal-actions">
-                <button class="btn-action btn-cancel" onclick="redirectToFacebook()">OK</button>
-                <button class="btn-action btn-join" onclick="openTelegramChannel()">JOIN</button>
-            </div>
-        </div>
-    </div>
 
-    <!-- Screen 4: Custom Alert Box -->
-    <div id="customAlertModal" class="modal-overlay hidden">
-        <div class="modal-card" style="text-align: center;">
-            <div id="customAlertTitle" style="font-size: 16px; font-weight: bold; margin-bottom: 10px; color: #38bdf8;"></div>
-            <div id="customAlertMsg" style="font-size: 13px; color: #dddddd; margin-bottom: 20px; line-height: 1.5;"></div>
-            <button class="btn-action btn-join" style="width: 100%;" onclick="closeCustomAlert()">OK</button>
+            <div id="vpnStatus" class="status-box text-warning">প্রক্সি সেকশনে ক্লিক করুন</div>
         </div>
+
     </div>
 
     <script>
-        // ===============================================
-        // ১. ফায়ারবেস কনফিগারেশন
-        // ===============================================
-        const firebaseConfig = {
-            apiKey: "AIzaSyDAWqPG5kdELGK-ypPLf2V9vtdXx4WqATA",
-            authDomain: "shs-developer-fb.firebaseapp.com",
-            databaseURL: "https://shs-developer-fb-default-rtdb.firebaseio.com",
-            projectId: "shs-developer-fb",
-            storageBucket: "shs-developer-fb.firebasestorage.app",
-            messagingSenderId: "115660277841",
-            appId: "1:115660277841:web:83f24c7f5b60aad2f25070"
-        };
-        firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
+        const DB_URL = "https://shs-developer-fb-default-rtdb.firebaseio.com/";
+        const TELEGRAM_USER = "saku_143"; // 👉 টেলিগ্রাম ইউজারনেম
 
-        // ===============================================
-        // ২. ইউনিক ডিভাইস আইডি তৈরির ইঞ্জিন
-        // ===============================================
-        function getDeviceID() {
-            let deviceId = localStorage.getItem("shs_app_hwid");
-            if (!deviceId) {
-                deviceId = "DEV-" + Math.random().toString(36).substring(2, 9) + "-" + Date.now();
-                localStorage.setItem("shs_app_hwid", deviceId);
+        // ডিভাইস লক আইডেন্টিফায়ার
+        function getDeviceId() {
+            let id = localStorage.getItem("app_device_uuid");
+            if (!id) {
+                id = "DEV-" + Math.random().toString(36).substring(2, 9) + "-" + Date.now();
+                localStorage.setItem("app_device_uuid", id);
             }
-            return deviceId;
+            return id;
         }
 
-        // ===============================================
-        // ৩. ওয়েবভিউ / অ্যাপক্রিয়েটর লিঙ্ক ওপেনার
-        // ===============================================
-        function safeOpenUrl(url) {
+        function openTelegram() {
+            window.location.href = "https://t.me/" + TELEGRAM_USER;
+        }
+
+        // ১. এক্সেস কোড ভেরিফিকেশন
+        async function verifyAccess() {
+            const code = document.getElementById("accessCode").value.trim();
+            const status = document.getElementById("loginStatus");
+            if (!code) return status.innerText = "এক্সেস কোড লিখুন!";
+
+            status.innerText = "কোড ভেরিফাই হচ্ছে...";
+
             try {
-                // WebView-তে window.open ক্র্যাশ রোধ করতে Dynamic Element
-                let a = document.createElement('a');
-                a.href = url;
-                a.target = '_blank';
-                a.rel = 'noopener noreferrer';
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-            } catch (e) {
-                window.location.href = url;
-            }
-        }
+                let res = await fetch(DB_URL + "codes/" + code + ".json");
+                let data = await res.json();
 
-        // ===============================================
-        // ৪. কাস্টম নোটিফিকেশন পপ-আপ
-        // ===============================================
-        let alertCallbackAction = null;
-        function showNotification(title, message, callback = null) {
-            document.getElementById("customAlertTitle").innerText = title;
-            document.getElementById("customAlertMsg").innerHTML = message;
-            document.getElementById("customAlertModal").classList.remove("hidden");
-            alertCallbackAction = callback;
-        }
-
-        function closeCustomAlert() {
-            document.getElementById("customAlertModal").classList.add("hidden");
-            if (alertCallbackAction) {
-                alertCallbackAction();
-                alertCallbackAction = null;
-            }
-        }
-
-        // অটো লগইন চেকিং
-        window.onload = function() {
-            const savedKey = localStorage.getItem("shs_active_key");
-            if (savedKey) {
-                document.getElementById("accessKeyInput").value = savedKey;
-                verifyKey();
-            }
-        };
-
-        // ===============================================
-        // ৫. কি ভ্যালিডেশন লজিক
-        // ===============================================
-        function verifyKey() {
-            const userKey = document.getElementById("accessKeyInput").value.trim();
-            if (!userKey) {
-                showNotification("⚠️ Input Required", "দয়া করে আপনার Access Key-টি প্রদান করুন।");
-                return;
-            }
-
-            document.getElementById("loginScreen").classList.add("hidden");
-            document.getElementById("loadingScreen").classList.remove("hidden");
-
-            const currentDeviceId = getDeviceID();
-
-            database.ref("keys/" + userKey).once("value").then((snapshot) => {
-                if (!snapshot.exists()) {
-                    showNotification("❌ Invalid Access Key", "আপনার দেওয়া Access Key-টি সঠিক নয়! সঠিক Key দিয়ে আবার চেষ্টা করুন।", resetToLogin);
-                    return;
+                if (!data) {
+                    status.className = "status-box text-error";
+                    return status.innerText = "❌ ভুল কোড! টেলিগ্রামে যোগাযোগ করুন।";
+                }
+                if (data.status !== "active") {
+                    status.className = "status-box text-error";
+                    return status.innerText = "🚫 এই কোডটি ডিজেবল করা হয়েছে!";
                 }
 
-                const keyData = snapshot.val();
+                let myDevId = getDeviceId();
 
-                if (!keyData.deviceId || keyData.deviceId === "") {
-                    database.ref("keys/" + userKey).update({ deviceId: currentDeviceId }).then(() => {
-                        localStorage.setItem("shs_active_key", userKey);
-                        showTelegramPopup();
+                if (!data.device_id) {
+                    await fetch(DB_URL + "codes/" + code + ".json", {
+                        method: "PATCH",
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ device_id: myDevId })
                     });
-                } 
-                else if (keyData.deviceId === currentDeviceId) {
-                    localStorage.setItem("shs_active_key", userKey);
-                    showTelegramPopup();
-                } 
-                else {
-                    showNotification(
-                        "🔒 Access Denied", 
-                        "এই Access Key-টি ইতিমধ্যে অন্য একটি ডিভাইসে ব্যবহার করা হয়েছে!<br><br><small style='color:#38bdf8;'>(1 Key = 1 Device Policy)</small>", 
-                        resetToLogin
-                    );
+                    showVpnScreen();
+                } else if (data.device_id === myDevId) {
+                    showVpnScreen();
+                } else {
+                    status.className = "status-box text-error";
+                    status.innerText = "⛔ Access Denied! এই কোডটি অন্য ফোনে ব্যবহৃত।";
                 }
-            }).catch((err) => {
-                showNotification("⚠️ Network Error", "নেটওয়ার্ক সমস্যা: " + err.message, resetToLogin);
-            });
+
+            } catch (e) {
+                status.className = "status-box text-error";
+                status.innerText = "⚠️ নেটওয়ার্ক সমস্যা! সংযোগ চেক করুন।";
+            }
         }
 
-        function resetToLogin() {
-            document.getElementById("loadingScreen").classList.add("hidden");
-            document.getElementById("loginScreen").classList.remove("hidden");
+        function showVpnScreen() {
+            document.getElementById("loginSection").style.display = "none";
+            document.getElementById("vpnSection").style.display = "block";
         }
 
-        function showTelegramPopup() {
-            document.getElementById("loadingScreen").classList.add("hidden");
-            document.getElementById("telegramModal").classList.remove("hidden");
-        }
+        // ২. গোল বাটন ক্লিক লজিক ও অরিজিনাল প্রক্সি চেক
+        async function connectProxy() {
+            const circleBtn = document.getElementById("circleBtn");
+            const circleIcon = document.getElementById("circleIcon");
+            const circleText = document.getElementById("circleText");
+            const vpnStatus = document.getElementById("vpnStatus");
 
-        // ===============================================
-        // ৬. নেভিগেশন ও রিডাইরেকশন ফাংশন
-        // ===============================================
-        function openTelegramChannel() {
-            safeOpenUrl("https://t.me/winfanti");
-            setTimeout(redirectToFacebook, 500);
-        }
+            // স্টেট পরিবর্তন (Connecting)
+            circleBtn.className = "circle-btn connecting";
+            circleIcon.innerText = "🟡";
+            circleText.innerText = "CHECKING";
+            vpnStatus.className = "status-box text-warning";
+            vpnStatus.innerText = "প্রক্সি চেক করা হচ্ছে...";
 
-        function redirectToFacebook() {
-            document.getElementById("telegramModal").classList.add("hidden");
-            window.location.href = "https://mbasic.facebook.com/";
-        }
+            try {
+                // ফায়ারবেস থেকে প্রক্সি ডাটা টেস্ট
+                let res = await fetch(DB_URL + "proxy_config.json");
+                let proxyData = await res.json();
 
-        function buyKey() {
-            safeOpenUrl("https://t.me/saku_143");
+                if (proxyData && proxyData.ip && proxyData.port) {
+                    // প্রক্সি সঠিকভাবে অ্যাড করা আছে
+                    circleBtn.className = "circle-btn connected";
+                    circleIcon.innerText = "🟢";
+                    circleText.innerText = "CONNECTED";
+                    
+                    vpnStatus.className = "status-box text-success";
+                    vpnStatus.innerText = "SUCCESS: Proxy Connected! Opening Facebook...";
+
+                    // ১ সেকেন্ড পর স্বয়ংক্রিয়ভাবে সরাসরি ফেসবুকে নিয়ে যাবে
+                    setTimeout(() => {
+                        window.location.href = "https://m.facebook.com";
+                    }, 1200);
+
+                } else {
+                    throw new Error("No Proxy");
+                }
+
+            } catch (e) {
+                // এডমিন প্যানেলে প্রক্সি অ্যাড করা নেই বা ভুল
+                circleBtn.className = "circle-btn error";
+                circleIcon.innerText = "🔴";
+                circleText.innerText = "ERROR";
+                
+                vpnStatus.className = "status-box text-error";
+                vpnStatus.innerText = "ERROR: এডমিন প্যানেলে সঠিক প্রক্সি যুক্ত করা নেই!";
+            }
         }
     </script>
 </body>
